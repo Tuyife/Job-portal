@@ -19,8 +19,8 @@
       "dest": "server/server.js"
     },
     {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "src": "^/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
