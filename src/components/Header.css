@@ -1,0 +1,65 @@
+.header {
+  background: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #1E40AF;
+}
+
+.logo p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #6B7280;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #374151;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+
+.nav-link:hover {
+  color: #2563EB;
+  background: #F3F4F6;
+}
+
+.nav-link.active {
+  color: #2563EB;
+  background: #DBEAFE;
+}
+
+.bookmark-badge {
+  background: #DBEAFE;
+  color: #2563EB;
+  padding: 0.25rem 0.5rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  margin-left: 0.25rem;
+}

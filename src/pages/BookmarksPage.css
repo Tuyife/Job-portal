@@ -1,0 +1,104 @@
+.bookmarks-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background: #f5f7fb;
+  min-height: 100vh;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 24px;
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.bookmarks-title {
+  font-size: 32px;
+  margin-bottom: 32px;
+  color: #333;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px;
+  background: white;
+  border-radius: 12px;
+  color: #999;
+}
+
+.browse-link {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 10px 20px;
+  background: #667eea;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+.bookmarks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.bookmark-card {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.bookmark-card:hover {
+  transform: translateX(4px);
+}
+
+.bookmark-link {
+  flex: 1;
+  text-decoration: none;
+}
+
+.bookmark-job-title {
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.bookmark-company {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.bookmark-category {
+  display: inline-block;
+  background: #e0e7ff;
+  color: #667eea;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.remove-bookmark-btn {
+  background: #fee;
+  color: #e74c3c;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.remove-bookmark-btn:hover {
+  background: #fdd;
+}

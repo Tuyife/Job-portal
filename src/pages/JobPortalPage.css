@@ -1,0 +1,83 @@
+.portal-container {
+  min-height: 100vh;
+  background: #F9FAFB;
+}
+
+.portal-layout {
+  display: flex;
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: 24px;
+  padding: 24px;
+}
+
+.portal-content {
+  flex: 1;
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 16px 0;
+}
+
+.results-count {
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.results-count span {
+  color: #2563EB;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.view-options {
+  display: flex;
+  gap: 8px;
+}
+
+.view-btn {
+  background: white;
+  border: 1px solid #E5E7EB;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #6B7280;
+  transition: all 0.2s;
+}
+
+.view-btn.active {
+  background: #2563EB;
+  border-color: #2563EB;
+  color: white;
+}
+
+.jobs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.jobs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.loading-text {
+  text-align: center;
+  padding: 60px;
+  color: #6B7280;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px;
+  background: white;
+  border-radius: 12px;
+  color: #9CA3AF;
+}

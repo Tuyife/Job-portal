@@ -1,0 +1,8 @@
+  const fetchJobs = async () => {
+    setLoading(true);
+    setJobs(jobsData);
+    setFilteredJobs(jobsData);
+    const uniqueCategories = ['All', ...new Set(jobsData.map(job => job.category))];
+    setCategories(uniqueCategories);
+    setLoading(false);
+  };
