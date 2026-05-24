@@ -34,9 +34,15 @@ export default function RegisterPage() {
   return (
     <div style={s.page}>
       <div style={s.card}>
-        <div style={s.brand}>JobBoard</div>
-        <h1 style={s.title}>Create account</h1>
-        <p style={s.sub}>Start finding your dream job today</p>
+        <button style={s.backBtn} onClick={() => navigate('/')}>
+          ← Back to home
+        </button>
+        <div style={s.brandRow}>
+          <div style={s.brand}>JobBoard</div>
+          <span style={s.brandTag}>New</span>
+        </div>
+        <h1 style={s.title}>Create your account</h1>
+        <p style={s.sub}>Get access to 50+ curated jobs, saved applications, and recommended matches.</p>
 
         {error && <div style={s.error}>{error}</div>}
 
@@ -89,32 +95,55 @@ export default function RegisterPage() {
               required
             />
           </div>
-          <button style={{ ...s.btn, opacity: loading ? 0.7 : 1 }} disabled={loading}>
+          <button style={{ ...s.btn, opacity: loading ? 0.8 : 1 }} disabled={loading}>
             {loading ? 'Creating account...' : 'Create Account'}
           </button>
         </form>
 
-        <p style={s.footer}>
-          Already have an account?{' '}
-          <Link to="/login" style={s.link}>Sign in</Link>
-        </p>
+        <div style={s.helpText}>
+          Already registered? <Link to="/login" style={s.link}>Sign in</Link>
+        </div>
+      </div>
+
+      <div style={s.statsCard}>
+        <div style={s.statTile}>
+          <div style={s.statValue}>50+</div>
+          <div style={s.statLabel}>Jobs ready</div>
+        </div>
+        <div style={s.statTile}>
+          <div style={s.statValue}>250+</div>
+          <div style={s.statLabel}>Companies hiring</div>
+        </div>
+        <div style={s.statTile}>
+          <div style={s.statValue}>99%</div>
+          <div style={s.statLabel}>Fast matches</div>
+        </div>
       </div>
     </div>
   );
 }
 
+const backIcon = <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>;
+
 const s = {
-  page:  { minHeight: '100vh', background: 'linear-gradient(135deg, #F7F6F3 0%, #FFFBF8 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' },
-  card:  { background: 'white', borderRadius: '20px', padding: '48px 40px', width: '100%', maxWidth: '450px', border: '1px solid #E5E3DC', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' },
-  brand: { fontSize: '24px', fontWeight: '700', color: '#111827', marginBottom: '32px', letterSpacing: '-0.5px' },
-  title: { fontSize: '28px', fontWeight: '700', color: '#111827', marginBottom: '8px', letterSpacing: '-0.3px' },
-  sub:   { fontSize: '15px', color: '#6B7280', marginBottom: '32px', lineHeight: '1.5' },
-  error: { background: '#FEF2F2', border: '1px solid #FECACA', color: '#B91C1C', borderRadius: '10px', padding: '14px 16px', fontSize: '14px', marginBottom: '22px', lineHeight: '1.5' },
+  page:  { minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', gap: '32px', background: 'var(--page-bg)' },
+  card:  { width: '100%', maxWidth: '440px', background: 'var(--surface)', borderRadius: '30px', padding: '40px 36px', border: '1px solid var(--border)', boxShadow: 'var(--shadow)' },
+  brandRow: { display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '18px' },
+  brand: { fontSize: '24px', fontWeight: '800', color: 'var(--text)' },
+  brandTag: { fontSize: '12px', fontWeight: '700', color: 'var(--accent)', background: 'var(--accent-soft)', borderRadius: '999px', padding: '8px 12px' },
+  title: { fontSize: '30px', fontWeight: '800', color: 'var(--text)', marginBottom: '10px' },
+  sub:   { fontSize: '15px', color: 'var(--muted)', marginBottom: '28px', lineHeight: '1.8' },
+  error: { background: '#fee2e2', border: '1px solid #fecaca', color: '#b91c1c', borderRadius: '14px', padding: '14px 16px', fontSize: '14px', marginBottom: '22px', lineHeight: '1.5' },
   form:  { display: 'flex', flexDirection: 'column', gap: '20px' },
-  field: { display: 'flex', flexDirection: 'column', gap: '8px' },
-  label: { fontSize: '14px', fontWeight: '600', color: '#374151' },
-  input: { padding: '12px 16px', borderRadius: '10px', border: '1.5px solid #E5E7EB', fontSize: '15px', color: '#111827', outline: 'none', transition: 'all 0.2s', fontFamily: 'inherit' },
-  btn:   { marginTop: '8px', padding: '14px', background: '#111827', color: 'white', border: 'none', borderRadius: '10px', fontSize: '16px', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s' },
-  footer:{ marginTop: '28px', textAlign: 'center', fontSize: '14px', color: '#6B7280' },
-  link:  { color: '#111827', fontWeight: '600', cursor: 'pointer' },
+  field: { display: 'flex', flexDirection: 'column', gap: '10px' },
+  label: { fontSize: '14px', fontWeight: '700', color: 'var(--muted)' },
+  input: { padding: '14px 16px', borderRadius: '16px', border: '1px solid var(--border)', background: 'var(--input-bg)', fontSize: '15px', color: 'var(--text)', outline: 'none', transition: 'all 0.2s' },
+  btn:   { marginTop: '4px', padding: '15px', background: 'var(--button-bg)', color: 'var(--button-text)', border: 'none', borderRadius: '16px', fontSize: '16px', fontWeight: '700', cursor: 'pointer' },
+  helpText: { marginTop: '26px', fontSize: '14px', color: 'var(--muted)', textAlign: 'center' },
+  link:  { color: 'var(--accent)', fontWeight: '700' },
+  backBtn: { background: 'none', border: 'none', color: 'var(--accent)', fontSize: '15px', fontWeight: '600', cursor: 'pointer', padding: '0 0 16px 0', textAlign: 'left', transition: 'all 0.2s' },
+  statsCard: { display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '16px', width: '100%', maxWidth: '440px', padding: '30px', borderRadius: '28px', background: 'var(--surface-soft)', border: '1px solid var(--border)', boxShadow: 'var(--shadow)' },
+  statTile: { display: 'flex', flexDirection: 'column', gap: '6px', padding: '18px', borderRadius: '22px', background: 'var(--surface)', border: '1px solid var(--border)' },
+  statValue: { fontSize: '24px', fontWeight: '800', color: 'var(--text)' },
+  statLabel: { fontSize: '13px', color: 'var(--muted)' },
 };

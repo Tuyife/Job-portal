@@ -4,7 +4,7 @@ import axios from 'axios';
 import Layout from '../components/Layout';
 import { useAuth } from '../context/AuthContext';
 
-const API = '';
+const API = import.meta.env.VITE_API_URL || '/api';
 
 const icons = {
   briefcase: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>,
@@ -21,12 +21,14 @@ export default function HomePage() {
 
   useEffect(() => {
     Promise.all([
-      axios.get(`${API}/jobs`),
-      axios.get(`${API}/jobs/categories`)
+      axios.get(`${API}/jobs`).catch(() => ({ data: [] })),
+      axios.get(`${API}/jobs/categories`).catch(() => ({ data: [] }))
     ]).then(([jobsRes, catsRes]) => {
-      setRecentJobs(jobsRes.data.slice(0, 4));
-      setStats({ jobs: jobsRes.data.length, categories: catsRes.data.length });
-    }).catch(console.error)
+      const jobs = Array.isArray(jobsRes.data) ? jobsRes.data : [];
+      const cats = Array.isArray(catsRes.data) ? catsRes.data : [];
+      setRecentJobs(jobs.slice(0, 4));
+      setStats({ jobs: jobs.length, categories: cats.length });
+    }).catch(() => setRecentJobs([]))
       .finally(() => setLoading(false));
   }, []);
 
@@ -41,12 +43,21 @@ export default function HomePage() {
     <Layout>
       <div style={s.hero}>
         <div style={s.heroTop}>
-          <span style={s.heroBadge}>Featured jobs, fresh opportunities</span>
-          <h1 style={s.heroTitle}>Find your next<br />dream role fast.</h1>
-          <p style={s.heroText}>Browse verified job listings, save favorites, and apply in one click from your dashboard.</p>
+          <span style={s.heroBadge}>⚡ Featured jobs, fresh opportunities</span>
+          <h1 style={s.heroTitle}>Find your next<br />dream job instantly.</h1>
+          <p style={s.heroText}>{user ? 'Browse verified job listings, save favorites, and apply in one click from your dashboard.' : 'Discover thousands of job opportunities, connect with top companies, and accelerate your career growth today.'}</p>
           <div style={s.heroActions}>
-            <button style={s.ctaBtn} onClick={() => navigate('/jobs')}>Browse jobs</button>
-            <button style={s.secondaryBtn} onClick={() => navigate('/applications')}>View applications</button>
+            {user ? (
+              <>
+                <button style={s.ctaBtn} onClick={() => navigate('/jobs')}>Browse jobs</button>
+                <button style={s.secondaryBtn} onClick={() => navigate('/applications')}>View applications</button>
+              </>
+            ) : (
+              <>
+                <button style={s.ctaBtn} onClick={() => navigate('/register')}>Get Started Free</button>
+                <button style={s.secondaryBtn} onClick={() => navigate('/login')}>Sign In</button>
+              </>
+            )}
           </div>
         </div>
         <div style={s.stats}>

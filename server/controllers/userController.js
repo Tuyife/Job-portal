@@ -7,6 +7,15 @@ const signToken = (user) => jwt.sign(
   { expiresIn: '7d' }
 );
 
+const sendDbError = (res, error) => {
+  const isDbTimeout = error?.message?.includes('buffering timed out');
+  return res.status(isDbTimeout ? 503 : 500).json({
+    message: isDbTimeout
+      ? 'Database connection failed. Check MongoDB and restart the server.'
+      : error.message
+  });
+};
+
 const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -33,7 +42,7 @@ const register = async (req, res) => {
       user: { id: user._id, name: user.name, email: user.email, role: user.role }
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendDbError(res, error);
   }
 };
 
@@ -63,7 +72,7 @@ const login = async (req, res) => {
       user: { id: user._id, name: user.name, email: user.email, role: user.role }
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendDbError(res, error);
   }
 };
 
@@ -73,7 +82,7 @@ const getProfile = async (req, res) => {
     if (!user) return res.status(404).json({ message: 'User not found' });
     res.json(user);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendDbError(res, error);
   }
 };
 
@@ -92,7 +101,7 @@ const toggleBookmark = async (req, res) => {
     await user.save();
     res.json({ bookmarkedJobs: user.bookmarkedJobs });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendDbError(res, error);
   }
 };
 
@@ -101,7 +110,7 @@ const getBookmarks = async (req, res) => {
     const user = await User.findById(req.user.userId).populate('bookmarkedJobs');
     res.json(user.bookmarkedJobs);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return sendDbError(res, error);
   }
 };
 

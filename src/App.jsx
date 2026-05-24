@@ -18,9 +18,9 @@ function AppRoutes() {
   const { user } = useAuth();
   return (
     <Routes>
+      <Route path="/"         element={<HomePage />} />
       <Route path="/login"    element={user ? <Navigate to="/" /> : <LoginPage />} />
       <Route path="/register" element={user ? <Navigate to="/" /> : <RegisterPage />} />
-      <Route path="/"         element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
       <Route path="/jobs"     element={<ProtectedRoute><JobsPage /></ProtectedRoute>} />
       <Route path="/jobs/:id" element={<ProtectedRoute><JobDetailPage /></ProtectedRoute>} />
       <Route path="/bookmarks"    element={<ProtectedRoute><BookmarksPage /></ProtectedRoute>} />
