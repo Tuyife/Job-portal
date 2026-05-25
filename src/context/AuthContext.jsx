@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
     } else {
       setLoading(false);
     }
-  }, []);
+  }, [token]);  // ✅ Added token to dependency array
 
   const login = async (email, password) => {
     const res = await axios.post(`${API}/users/login`, { email, password });
