@@ -13,98 +13,146 @@ const icons = {
 };
 
 const navItems = [
-  { path: '/',            label: 'Home',         icon: icons.home },
-  { path: '/jobs',        label: 'Jobs',         icon: icons.jobs },
-  { path: '/bookmarks',   label: 'Saved',        icon: icons.bookmark },
-  { path: '/applications',label: 'Applied',      icon: icons.apps },
+  { path: '/', label: 'Home', icon: icons.home },
+  { path: '/jobs', label: 'Jobs', icon: icons.jobs },
+  { path: '/bookmarks', label: 'Saved', icon: icons.bookmark },
+  { path: '/applications', label: 'Applied', icon: icons.apps },
 ];
 
 export default function Layout({ children }) {
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
-  const isMobile = window.innerWidth < 768;
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
 
   useEffect(() => {
     document.documentElement.className = theme;
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  const handleLogout = () => { logout(); navigate('/login'); };
-  const toggleTheme = () => setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
+  const toggleTheme = () => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+
+  const headerStyle = isMobile ? s.headerMobile : s.header;
+  const brandStyle = isMobile ? s.brandMobile : s.brand;
+  const headerRightStyle = isMobile ? s.headerRightMobile : s.headerRight;
+  const logoutStyle = isMobile ? s.logoutBtnMobile : s.logoutBtn;
+  const themeStyle = isMobile ? s.themeBtnMobile : s.themeBtn;
+  const navStyle = isMobile ? s.navMobile : s.navDesktop;
+  const footerPadding = isMobile ? s.footerMobile : s.footer;
+  const footerInnerStyle = isMobile ? s.footerInnerMobile : s.footerInner;
+  const footerLinksStyle = isMobile ? s.footerLinksMobile : s.footerLinks;
 
   return (
     <div style={s.shell}>
-      <header style={s.header}>
-        <Link to="/" style={s.brand}>JobBoard</Link>
-        <div style={s.headerRight}>
-          <button style={s.themeBtn} onClick={toggleTheme} aria-label="Toggle theme">
+      <header style={headerStyle}>
+        <Link to="/" style={brandStyle}>JobBoard</Link>
+        <div style={headerRightStyle}>
+          <button style={themeStyle} onClick={toggleTheme} aria-label="Toggle theme">
             {theme === 'dark' ? icons.sun : icons.moon}
           </button>
-          <span style={s.userName}>{user?.name}</span>
-          <button style={s.logoutBtn} onClick={handleLogout}>
+          {!isMobile && <span style={s.userName}>{user?.name}</span>}
+          <button style={logoutStyle} onClick={handleLogout} aria-label="Logout">
             {icons.logout}
           </button>
         </div>
       </header>
 
-      {isMobile ? (
-        <nav style={s.navMobile}>
-          {navItems.map(item => {
-            const active = location.pathname === item.path;
-            return (
-              <Link key={item.path} to={item.path} style={{ ...s.navItem, color: active ? 'var(--text)' : 'var(--muted)' }}>
-                {item.icon}
-                <span style={{ ...s.navLabel, fontWeight: active ? '600' : '400' }}>{item.label}</span>
-                {active && <span style={s.navDot} />}
-              </Link>
-            );
-          })}
-        </nav>
-      ) : (
-        <nav style={s.navDesktop}>
-          {navItems.map(item => {
-            const active = location.pathname === item.path;
-            return (
-              <Link 
-                key={item.path} 
-                to={item.path} 
-                style={{ 
-                  ...s.navItemDesktop,
-                  background: active ? 'var(--surface-soft)' : 'transparent',
-                  color: active ? 'var(--text)' : 'var(--muted)',
-                  fontWeight: active ? '600' : '400'
-                }}
-              >
-                {item.icon}
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
-        </nav>
-      )}
+      <nav style={navStyle}>
+        {navItems.map((item) => {
+          const active = location.pathname === item.path;
+          return (
+            <Link
+              key={item.path}
+              to={item.path}
+              style={{
+                ...s.navItem,
+                ...(isMobile ? s.navItemMobile : s.navItemDesktop),
+                color: active ? 'var(--text)' : 'var(--muted)',
+                background: active ? 'var(--surface-soft)' : 'transparent',
+                fontWeight: active ? '600' : '400',
+              }}
+            >
+              {item.icon}
+              <span style={isMobile ? s.navLabelMobile : undefined}>{item.label}</span>
+              {active && isMobile && <span style={s.navDot} />}
+            </Link>
+          );
+        })}
+      </nav>
 
-      <main style={s.main}>
-        {children}
-      </main>
+      <main style={s.main}>{children}</main>
+
+      <footer style={footerPadding}>
+        <div style={footerInnerStyle}>
+          <div>
+            <div style={s.footerBrand}>JobBoard</div>
+            <p style={s.footerText}>Discover opportunities, track applications, and build your next move with a simpler job search experience.</p>
+          </div>
+
+          <div style={footerLinksStyle}>
+            <div>
+              <div style={s.footerHeading}>Explore</div>
+              <Link to="/" style={s.footerLink}>Home</Link>
+              <Link to="/jobs" style={s.footerLink}>Jobs</Link>
+              <Link to="/applications" style={s.footerLink}>Applications</Link>
+            </div>
+            <div>
+              <div style={s.footerHeading}>Support</div>
+              <Link to="/login" style={s.footerLink}>Sign in</Link>
+              <Link to="/register" style={s.footerLink}>Create account</Link>
+              <a href="mailto:tuyifeisrael@gmail.com" style={s.footerLink}>tuyifeisrael@gmail.com</a>
+            </div>
+          </div>
+        </div>
+        <div style={s.footerBottom}>© 2026 JobBoard • Built for fast, friendly hiring.</div>
+      </footer>
     </div>
   );
 }
 
 const s = {
-  shell:     { minHeight: '100vh', background: 'transparent', display: 'flex', flexDirection: 'column' },
-  header:    { position: 'sticky', top: 0, zIndex: 100, background: 'var(--surface)', borderBottom: '1px solid var(--border)', padding: '18px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 12px 28px rgba(15,23,42,0.08)' },
-  brand:     { fontSize: '22px', fontWeight: '800', color: 'var(--text)', letterSpacing: '-0.75px' },
+  shell: { minHeight: '100vh', background: 'transparent', display: 'flex', flexDirection: 'column' },
+  header: { position: 'sticky', top: 0, zIndex: 100, background: 'var(--surface)', borderBottom: '1px solid var(--border)', padding: '18px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 12px 28px rgba(15,23,42,0.08)' },
+  headerMobile: { position: 'sticky', top: 0, zIndex: 100, background: 'var(--surface)', borderBottom: '1px solid var(--border)', padding: '14px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 12px 28px rgba(15,23,42,0.08)' },
+  brand: { fontSize: '22px', fontWeight: '800', color: 'var(--text)', letterSpacing: '-0.75px' },
+  brandMobile: { fontSize: '18px', fontWeight: '800', color: 'var(--text)', letterSpacing: '-0.6px' },
   headerRight: { display: 'flex', alignItems: 'center', gap: '16px' },
-  userName:  { fontSize: '14px', fontWeight: '500', color: 'var(--muted)', display: 'none' },
+  headerRightMobile: { display: 'flex', alignItems: 'center', gap: '10px' },
+  userName: { fontSize: '14px', fontWeight: '500', color: 'var(--muted)' },
   logoutBtn: { background: 'none', border: '1px solid var(--border)', cursor: 'pointer', color: 'var(--muted)', display: 'flex', alignItems: 'center', padding: '10px 12px', borderRadius: '12px' },
-  themeBtn:  { background: 'var(--surface-soft)', border: '1px solid var(--border)', borderRadius: '12px', padding: '10px 12px', cursor: 'pointer', display: 'flex', alignItems: 'center', color: 'var(--text)' },
-  main:      { flex: 1, width: '100%', paddingBottom: '80px' },
-  navMobile: { position: 'sticky', top: 72, background: 'var(--surface)', borderBottom: '1px solid var(--border)', display: 'flex', zIndex: 100, padding: '10px 0', boxShadow: '0 10px 30px rgba(15, 23, 42, 0.05)' },
+  logoutBtnMobile: { background: 'none', border: '1px solid var(--border)', cursor: 'pointer', color: 'var(--muted)', display: 'flex', alignItems: 'center', padding: '9px 10px', borderRadius: '12px' },
+  themeBtn: { background: 'var(--surface-soft)', border: '1px solid var(--border)', borderRadius: '12px', padding: '10px 12px', cursor: 'pointer', display: 'flex', alignItems: 'center', color: 'var(--text)' },
+  themeBtnMobile: { background: 'var(--surface-soft)', border: '1px solid var(--border)', borderRadius: '12px', padding: '9px 10px', cursor: 'pointer', display: 'flex', alignItems: 'center', color: 'var(--text)' },
+  main: { flex: 1, width: '100%', paddingBottom: '80px' },
+  navMobile: { position: 'sticky', top: 61, background: 'var(--surface)', borderBottom: '1px solid var(--border)', display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '6px', zIndex: 100, padding: '10px 12px', boxShadow: '0 10px 30px rgba(15, 23, 42, 0.05)' },
   navDesktop: { position: 'sticky', top: 72, display: 'flex', gap: '10px', padding: '16px 24px', borderBottom: '1px solid var(--border)', background: 'var(--surface)', zIndex: 100, boxShadow: '0 10px 30px rgba(15, 23, 42, 0.03)' },
-  navItem:   { flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '10px 0 8px', textDecoration: 'none', position: 'relative', gap: '3px', transition: 'all 0.2s' },
-  navItemDesktop: { display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 16px', borderRadius: '12px', textDecoration: 'none', transition: 'all 0.2s', cursor: 'pointer' },
-  navLabel:  { fontSize: '11px', letterSpacing: '0.2px' },
-  navDot:    { position: 'absolute', bottom: '6px', width: '4px', height: '4px', borderRadius: '50%', background: 'var(--text)' },
+  navItem: { textDecoration: 'none', transition: 'all 0.2s', cursor: 'pointer' },
+  navItemMobile: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '4px', padding: '10px 6px', borderRadius: '14px', minHeight: '68px' },
+  navItemDesktop: { display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 16px', borderRadius: '12px' },
+  navLabelMobile: { fontSize: '10px', letterSpacing: '0.2px' },
+  navDot: { position: 'absolute', bottom: '6px', width: '4px', height: '4px', borderRadius: '50%', background: 'var(--text)' },
+  footer: { marginTop: '24px', background: 'linear-gradient(135deg, #111827 0%, #1F2937 100%)', color: '#F9FAFB', padding: '36px 24px 20px' },
+  footerMobile: { marginTop: '24px', background: 'linear-gradient(135deg, #111827 0%, #1F2937 100%)', color: '#F9FAFB', padding: '28px 16px 18px' },
+  footerInner: { maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '28px', alignItems: 'start' },
+  footerInnerMobile: { maxWidth: '1200px', margin: '0 auto', display: 'grid', gap: '24px', alignItems: 'start' },
+  footerBrand: { fontSize: '22px', fontWeight: '800', marginBottom: '10px' },
+  footerText: { color: '#D1D5DB', fontSize: '14px', lineHeight: '1.7', maxWidth: '460px' },
+  footerLinks: { display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '20px' },
+  footerLinksMobile: { display: 'grid', gridTemplateColumns: '1fr', gap: '18px' },
+  footerHeading: { fontSize: '13px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#F97316', marginBottom: '12px' },
+  footerLink: { display: 'block', color: '#E5E7EB', textDecoration: 'none', fontSize: '14px', marginBottom: '10px' },
+  footerBottom: { maxWidth: '1200px', margin: '28px auto 0', paddingTop: '18px', borderTop: '1px solid rgba(255,255,255,0.12)', color: '#CBD5E1', fontSize: '13px' },
 };

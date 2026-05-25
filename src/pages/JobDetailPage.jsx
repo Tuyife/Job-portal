@@ -96,6 +96,18 @@ export default function JobDetailPage() {
           <span style={s.badge}>{job.category}</span>
           <span style={s.badge}>{job.type}</span>
         </div>
+
+        {(job.image || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80') && (
+          <div style={s.heroImageWrap}>
+            <img
+              style={s.heroImage}
+              src={job.image || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80'}
+              alt={`${job.title} opportunity`}
+            />
+            <div style={s.heroCaption}>A closer look at this role, with responsibilities, requirements, and a simple application flow.</div>
+          </div>
+        )}
+
         <div style={s.metaGrid}>
           <div style={s.metaItem}><div style={s.metaLabel}>Location</div><div style={s.metaVal}>{job.location}</div></div>
           <div style={s.metaItem}><div style={s.metaLabel}>Salary</div><div style={s.metaVal}>{job.salary}</div></div>
@@ -174,6 +186,9 @@ const s = {
   company:     { fontSize: '15px', color: '#6B7280', marginBottom: '16px', fontWeight: '500' },
   badges:      { display: 'flex', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' },
   badge:       { fontSize: '12px', fontWeight: '600', background: '#F3F4F6', color: '#374151', padding: '6px 12px', borderRadius: '8px' },
+  heroImageWrap:{ borderRadius: '18px', overflow: 'hidden', marginBottom: '20px', border: '1px solid #E5E3DC', background: '#F7F6F3' },
+  heroImage:   { width: '100%', height: '240px', objectFit: 'cover', display: 'block' },
+  heroCaption: { padding: '14px 16px', fontSize: '13px', color: '#4B5563', lineHeight: '1.6' },
   metaGrid:    { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '12px' },
   metaItem:    { background: '#F7F6F3', borderRadius: '10px', padding: '12px' },
   metaLabel:   { fontSize: '11px', color: '#9CA3AF', fontWeight: '600', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.4px' },

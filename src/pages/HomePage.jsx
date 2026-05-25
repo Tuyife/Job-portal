@@ -42,24 +42,39 @@ export default function HomePage() {
   return (
     <Layout>
       <div style={s.hero}>
-        <div style={s.heroTop}>
-          <span style={s.heroBadge}>⚡ Featured jobs, fresh opportunities</span>
-          <h1 style={s.heroTitle}>Find your next<br />dream job instantly.</h1>
-          <p style={s.heroText}>{user ? 'Browse verified job listings, save favorites, and apply in one click from your dashboard.' : 'Discover thousands of job opportunities, connect with top companies, and accelerate your career growth today.'}</p>
-          <div style={s.heroActions}>
-            {user ? (
-              <>
-                <button style={s.ctaBtn} onClick={() => navigate('/jobs')}>Browse jobs</button>
-                <button style={s.secondaryBtn} onClick={() => navigate('/applications')}>View applications</button>
-              </>
-            ) : (
-              <>
-                <button style={s.ctaBtn} onClick={() => navigate('/register')}>Get Started Free</button>
-                <button style={s.secondaryBtn} onClick={() => navigate('/login')}>Sign In</button>
-              </>
-            )}
+        <div style={s.heroLayout}>
+          <div style={s.heroTop}>
+            <span style={s.heroBadge}>⚡ Featured jobs, fresh opportunities</span>
+            <h1 style={s.heroTitle}>Find your next<br />dream job instantly.</h1>
+            <p style={s.heroText}>{user ? 'Browse verified job listings, save favorites, and apply in one click from your dashboard.' : 'Discover thousands of job opportunities, connect with top companies, and accelerate your career growth today.'}</p>
+            <div style={s.heroActions}>
+              {user ? (
+                <>
+                  <button style={s.ctaBtn} onClick={() => navigate('/jobs')}>Browse jobs</button>
+                  <button style={s.secondaryBtn} onClick={() => navigate('/applications')}>View applications</button>
+                </>
+              ) : (
+                <>
+                  <button style={s.ctaBtn} onClick={() => navigate('/register')}>Get Started Free</button>
+                  <button style={s.secondaryBtn} onClick={() => navigate('/login')}>Sign In</button>
+                </>
+              )}
+            </div>
+          </div>
+
+          <div style={s.heroVisual}>
+            <img
+              style={s.heroImage}
+              src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80"
+              alt="Professionals reviewing job opportunities"
+            />
+            <div style={s.heroImageOverlay}>
+              <div style={s.heroImageBadge}>Top hiring trends</div>
+              <div style={s.heroImageCaption}>Explore roles in tech, design, marketing, and more — all in one place.</div>
+            </div>
           </div>
         </div>
+
         <div style={s.stats}>
           <div style={s.stat}>
             <span style={s.statNum}>{stats.jobs}+</span>
@@ -122,21 +137,27 @@ export default function HomePage() {
 }
 
 const s = {
-  hero:        { background: 'linear-gradient(135deg, #1F2937 0%, #111827 100%)', padding: '48px 24px 32px', color: 'white', borderRadius: '0 0 32px 32px', marginBottom: '20px' },
-  heroTop:     { maxWidth: '780px', marginBottom: '32px' },
-  heroBadge:   { display: 'inline-flex', padding: '8px 14px', borderRadius: '999px', background: '#111827', color: '#F9FAFB', fontSize: '12px', fontWeight: '700', letterSpacing: '0.5px', marginBottom: '18px' },
-  greeting:    { fontSize: '14px', color: '#D1D5DB', marginBottom: '8px' },
-  heroTitle:   { fontSize: '44px', fontWeight: '800', lineHeight: '1.05', marginBottom: '18px', letterSpacing: '-1px' },
-  heroText:    { fontSize: '16px', color: '#D1D5DB', lineHeight: '1.8', maxWidth: '620px', marginBottom: '28px' },
-  heroActions: { display: 'flex', flexWrap: 'wrap', gap: '14px' },
-  ctaBtn:      { background: '#F97316', color: 'white', border: 'none', borderRadius: '14px', padding: '14px 24px', fontSize: '15px', fontWeight: '700', cursor: 'pointer', boxShadow: '0 18px 40px rgba(249,115,22,0.18)' },
-  secondaryBtn:{ background: 'rgba(255,255,255,0.14)', color: 'white', border: '1px solid rgba(255,255,255,0.18)', borderRadius: '14px', padding: '14px 24px', fontSize: '15px', fontWeight: '600', cursor: 'pointer' },
-  stats:       { display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '24px', marginTop: '12px' },
-  stat:        { display: 'flex', flexDirection: 'column', alignItems: 'center' },
-  statNum:     { fontSize: '28px', fontWeight: '700', color: 'white' },
-  statLabel:   { fontSize: '12px', color: '#9CA3AF', marginTop: '4px' },
-  statDivider: { display: 'none' },
-  section:     { padding: '32px 24px', maxWidth: '1200px', margin: '0 auto' },
+  hero:          { background: 'linear-gradient(135deg, #1F2937 0%, #111827 100%)', padding: '48px 24px 32px', color: 'white', borderRadius: '0 0 32px 32px', marginBottom: '20px' },
+  heroLayout:    { display: 'grid', gridTemplateColumns: 'minmax(0, 1.1fr) minmax(280px, 0.9fr)', gap: '28px', alignItems: 'center' },
+  heroTop:       { maxWidth: '780px', marginBottom: '32px' },
+  heroBadge:     { display: 'inline-flex', padding: '8px 14px', borderRadius: '999px', background: '#111827', color: '#F9FAFB', fontSize: '12px', fontWeight: '700', letterSpacing: '0.5px', marginBottom: '18px' },
+  greeting:      { fontSize: '14px', color: '#D1D5DB', marginBottom: '8px' },
+  heroTitle:     { fontSize: '44px', fontWeight: '800', lineHeight: '1.05', marginBottom: '18px', letterSpacing: '-1px' },
+  heroText:      { fontSize: '16px', color: '#D1D5DB', lineHeight: '1.8', maxWidth: '620px', marginBottom: '28px' },
+  heroActions:   { display: 'flex', flexWrap: 'wrap', gap: '14px' },
+  heroVisual:    { position: 'relative', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 30px 60px rgba(15, 23, 42, 0.28)', background: '#0F172A' },
+  heroImage:     { width: '100%', height: '100%', minHeight: '320px', objectFit: 'cover', display: 'block' },
+  heroImageOverlay: { position: 'absolute', inset: 'auto 16px 16px 16px', background: 'rgba(15, 23, 42, 0.76)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '18px', padding: '16px' },
+  heroImageBadge:{ display: 'inline-flex', padding: '6px 10px', borderRadius: '999px', background: 'rgba(249,115,22,0.9)', color: 'white', fontSize: '12px', fontWeight: '700', marginBottom: '8px' },
+  heroImageCaption:{ fontSize: '13px', color: '#F9FAFB', lineHeight: '1.6' },
+  ctaBtn:        { background: '#F97316', color: 'white', border: 'none', borderRadius: '14px', padding: '14px 24px', fontSize: '15px', fontWeight: '700', cursor: 'pointer', boxShadow: '0 18px 40px rgba(249,115,22,0.18)' },
+  secondaryBtn:  { background: 'rgba(255,255,255,0.14)', color: 'white', border: '1px solid rgba(255,255,255,0.18)', borderRadius: '14px', padding: '14px 24px', fontSize: '15px', fontWeight: '600', cursor: 'pointer' },
+  stats:         { display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '24px', marginTop: '12px' },
+  stat:          { display: 'flex', flexDirection: 'column', alignItems: 'center' },
+  statNum:       { fontSize: '28px', fontWeight: '700', color: 'white' },
+  statLabel:     { fontSize: '12px', color: '#9CA3AF', marginTop: '4px' },
+  statDivider:   { display: 'none' },
+  section:       { padding: '32px 24px', maxWidth: '1200px', margin: '0 auto' },
   sectionHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' },
   sectionTitle:  { fontSize: '20px', fontWeight: '700', color: '#111827' },
   seeAll:      { background: 'none', border: 'none', cursor: 'pointer', fontSize: '13px', color: '#6B7280', fontWeight: '500' },

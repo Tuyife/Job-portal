@@ -65,8 +65,24 @@ const sampleJobs = [
   { title: 'Brand Designer', company: 'IdentityLab', location: 'San Francisco, CA', type: 'Full-time', salary: '$110k - $135k', description: 'Create strong brand identity systems and visual direction.', requirements: ['brand design', 'art direction', 'creative tools'], category: 'Design' },
   { title: 'Machine Learning Engineer', company: 'TensorWorks', location: 'Boston, MA', type: 'Full-time', salary: '$150k - $185k', description: 'Implement production ML systems and model deployment.', requirements: ['ML engineering', 'Python', 'MLOps'], category: 'Data' },
   { title: 'Growth Operations Specialist', company: 'ScaleUp', location: 'Remote', type: 'Full-time', salary: '$90k - $108k', description: 'Support growth teams with experimentation and analytics.', requirements: ['growth ops', 'data', 'project management'], category: 'Marketing' },
-  { title: 'Strategy Analyst', company: 'FutureRoad', location: 'New York, NY', type: 'Full-time', salary: '$105k - $125k', description: 'Research market opportunities and advise leadership decisions.', requirements: ['strategy', 'analysis', 'communication'], category: 'Product' }
+  { title: 'Strategy Analyst', company: 'FutureRoad', location: 'New York, NY', type: 'Full-time', salary: '$105k - $125k', description: 'Research market opportunities and advise leadership decisions.', requirements: ['strategy', 'analysis', 'communication'], category: 'Product' },
+  { title: 'Cleaner', company: 'CleanSwift Services', location: 'Chicago, IL', type: 'Part-time', salary: '$18 - $24/hr', description: 'Keep homes, offices, and shared spaces spotless with a reliable cleaning schedule.', requirements: ['Attention to detail', 'Time management', 'Reliable transportation'], category: 'Services', image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1200&q=80' },
+  { title: 'Driver', company: 'CityRide Logistics', location: 'Dallas, TX', type: 'Full-time', salary: '$25 - $32/hr', description: 'Deliver packages and support daily dispatch operations with professionalism and safety.', requirements: ['Valid driver license', 'Safe driving record', 'Customer service mindset'], category: 'Services', image: 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=1200&q=80' }
 ];
+
+const ensureSampleJobs = async () => {
+  const titles = sampleJobs.map(job => job.title);
+  const existing = await Job.find({ title: { $in: titles } }).select('title');
+  const existingTitles = new Set(existing.map(job => job.title));
+  const toInsert = sampleJobs.filter(job => !existingTitles.has(job.title));
+
+  if (toInsert.length > 0) {
+    await Job.insertMany(toInsert);
+    console.log(`[OK] Seeded ${toInsert.length} new sample jobs`);
+  }
+
+  return toInsert.length;
+};
 
 const getJobs = async (req, res) => {
   try {
@@ -150,4 +166,4 @@ const seedJobs = async (req, res) => {
   }
 };
 
-module.exports = { sampleJobs, getJobs, getJobById, createJob, updateJob, deleteJob, getCategories, seedJobs };
+module.exports = { sampleJobs, ensureSampleJobs, getJobs, getJobById, createJob, updateJob, deleteJob, getCategories, seedJobs };

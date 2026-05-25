@@ -8,23 +8,17 @@ import JobDetailPage from './pages/JobDetailPage';
 import BookmarksPage from './pages/BookmarksPage';
 import ApplicationsPage from './pages/ApplicationsPage';
 
-const ProtectedRoute = ({ children }) => {
-  const { user, loading } = useAuth();
-  if (loading) return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', color: '#6B7280' }}>Loading...</div>;
-  return user ? children : <Navigate to="/login" />;
-};
-
 function AppRoutes() {
   const { user } = useAuth();
   return (
     <Routes>
-      <Route path="/"         element={<HomePage />} />
-      <Route path="/login"    element={user ? <Navigate to="/" /> : <LoginPage />} />
+      <Route path="/" element={<HomePage />} />
+      <Route path="/login" element={user ? <Navigate to="/" /> : <LoginPage />} />
       <Route path="/register" element={user ? <Navigate to="/" /> : <RegisterPage />} />
-      <Route path="/jobs"     element={<ProtectedRoute><JobsPage /></ProtectedRoute>} />
-      <Route path="/jobs/:id" element={<ProtectedRoute><JobDetailPage /></ProtectedRoute>} />
-      <Route path="/bookmarks"    element={<ProtectedRoute><BookmarksPage /></ProtectedRoute>} />
-      <Route path="/applications" element={<ProtectedRoute><ApplicationsPage /></ProtectedRoute>} />
+      <Route path="/jobs" element={<JobsPage />} />
+      <Route path="/jobs/:id" element={<JobDetailPage />} />
+      <Route path="/bookmarks" element={<BookmarksPage />} />
+      <Route path="/applications" element={<ApplicationsPage />} />
     </Routes>
   );
 }

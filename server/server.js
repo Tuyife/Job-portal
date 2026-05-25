@@ -2,8 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const Job = require('./models/Job');
-const { sampleJobs } = require('./controllers/jobController');
+const { ensureSampleJobs } = require('./controllers/jobController');
 
 const app = express();
 const PORT = process.env.PORT || 5050;
@@ -11,20 +10,33 @@ const DB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/jobboard';
 
 mongoose.set('strictQuery', false);
 
-mongoose.connect(DB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 10000,
-})
-  .then(async () => {
-    console.log('[OK] MongoDB connected');
-    const count = await Job.countDocuments();
-    if (count === 0) {
-      await Job.insertMany(sampleJobs);
-      console.log('[OK] Seeded sample jobs');
+const fallbackDB_URI = 'mongodb://localhost:27017/jobboard';
+
+const connectDatabase = async () => {
+  const candidates = process.env.MONGODB_URI ? [process.env.MONGODB_URI, fallbackDB_URI] : [fallbackDB_URI];
+  let lastError;
+
+  for (const uri of candidates) {
+    try {
+      await mongoose.connect(uri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        serverSelectionTimeoutMS: 10000,
+      });
+
+      console.log(`[OK] MongoDB connected to ${uri === fallbackDB_URI ? 'local fallback' : 'primary URI'}`);
+      await ensureSampleJobs();
+      return;
+    } catch (error) {
+      lastError = error;
+      console.error(`[WARN] MongoDB connection failed for ${uri}:`, error.message);
     }
-  })
-  .catch(err => console.error('[ERR] MongoDB error:', err));
+  }
+
+  throw lastError;
+};
+
+connectDatabase().catch(err => console.error('[ERR] MongoDB error:', err));
 
 mongoose.connection.on('connected', () => console.log('[OK] Mongoose connection established'));
 mongoose.connection.on('error', err => console.error('[ERR] Mongoose connection error:', err));
