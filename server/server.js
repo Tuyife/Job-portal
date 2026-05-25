@@ -41,8 +41,20 @@ connectDatabase().catch(err => console.error('[ERR] MongoDB error:', err));
 mongoose.connection.on('connected', () => console.log('[OK] Mongoose connection established'));
 mongoose.connection.on('error', err => console.error('[ERR] Mongoose connection error:', err));
 
+const allowedOrigins = (process.env.CORS_ORIGINS || 'http://localhost:5173,http://localhost:5174,http://localhost:5175,http://localhost:5176,http://localhost:5177')
+  .split(',')
+  .map(origin => origin.trim())
+  .filter(Boolean);
+
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://localhost:5176', 'http://localhost:5177'],
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+      return;
+    }
+
+    callback(new Error(`Origin ${origin} not allowed by CORS`));
+  },
   credentials: true
 }));
 app.use(express.json());
@@ -53,4 +65,4 @@ app.use('/api/applications', require('./routes/applications'));
 
 app.get('/', (_req, res) => res.json({ message: 'JobBoard API running' }));
 
-app.listen(PORT, () => console.log(`[OK] Server running on http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`[OK] Server running on https://job-portal-2-oxal.onrender.com/api`));
